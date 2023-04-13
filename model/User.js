@@ -11,9 +11,6 @@ const UserSchema = mongoose.Schema(
     },
     profilePicture: {
       type: String,
-      required: true,
-      default:
-        "https://res.cloudinary.com/dn4lenrqs/image/upload/v1681243665/Mega-Chat/tmp-2-1681243655947_nhfxu7.jpg",
     },
     bio: {
       type: String,

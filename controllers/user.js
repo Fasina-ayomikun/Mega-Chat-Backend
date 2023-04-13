@@ -4,7 +4,11 @@ const User = require("../model/User");
 
 const registerUser = async (req, res) => {
   try {
-    const { phone } = req.body;
+    const { phone, profilePicture } = req.body;
+    if (!profilePicture) {
+      req.body.profilePicture =
+        "https://res.cloudinary.com/dn4lenrqs/image/upload/v1681243665/Mega-Chat/tmp-2-1681243655947_nhfxu7.jpg";
+    }
     const user = await User.findOne({ phone });
     if (user) {
       res
