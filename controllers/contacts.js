@@ -57,8 +57,6 @@ const updateContact = async (req, res) => {
       phone,
       user: userId,
     });
-    console.log(alreadyExistingContact);
-    // console.log(userId);
     if (!contact) {
       throw new BadRequestError("This contact does not exist");
     }
@@ -88,7 +86,6 @@ const deleteContact = async (req, res) => {
   try {
     const { id } = req.params;
     const contact = await Contact.findOne({ _id: id });
-    console.log(contact);
     if (!contact) {
       throw new BadRequestError("This contact does not exist");
     }
@@ -99,7 +96,6 @@ const deleteContact = async (req, res) => {
       msg: "Contact deleted successfully",
     });
   } catch (error) {
-    console.log(error);
     checkError(res, error);
   }
 };

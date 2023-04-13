@@ -25,9 +25,7 @@ const registerUser = async (req, res) => {
 const getSingleUser = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
     const user = await User.findOne({ phone: id });
-    console.log(user);
     if (!user) {
       throw new NotFoundError("User does not use Mega Chat");
     }
