@@ -13,7 +13,6 @@ const createConversation = async (req, res) => {
     }
     const senderExist = await User.findOne({ phone: senderId });
     const receiverExist = await User.findOne({ phone: receiverId });
-    const receiver = await Contact.findOne({ phone: receiverId });
 
     if (!senderExist || !receiverExist) {
       throw new NotFoundError("User does not use Mega Chat");
@@ -26,10 +25,10 @@ const createConversation = async (req, res) => {
         "These Users already have an existing conversation"
       );
     }
-    // const receiver = await Contact.findOne({user:userId})
+  
     const conversation = await Conversation.create({
       members: [senderId, receiverId],
-      receiver,
+
     });
     res.status(201).json({
       conversation,
