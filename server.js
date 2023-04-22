@@ -65,6 +65,7 @@ app.use("/api/v1/contacts", require("./routes/contacts"));
 app.use("/api/v1/conversation", require("./routes/conversation"));
 app.use("/api/v1/messages", require("./routes/messages"));
 app.use("/api/v1/upload", require("./routes/files"));
+start();
 app.use(notFoundMiddleware);
 
 const start = async () => {
@@ -103,4 +104,3 @@ const start = async () => {
     console.log(error);
   }
 };
-start();
