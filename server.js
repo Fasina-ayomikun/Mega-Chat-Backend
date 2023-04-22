@@ -65,42 +65,44 @@ app.use("/api/v1/contacts", require("./routes/contacts"));
 app.use("/api/v1/conversation", require("./routes/conversation"));
 app.use("/api/v1/messages", require("./routes/messages"));
 app.use("/api/v1/upload", require("./routes/files"));
-start();
 app.use(notFoundMiddleware);
 
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URI);
-    const server = app.listen(PORT, () => {
-      console.log("server listening");
-    });
-    const io = require("socket.io")(server, {
-      cors: {
-        origin: process.env.FRONTEND_LINK,
-        credentials: true,
-      },
-    });
-    io.on("connection", (socket) => {
-      console.log("user connected");
-
-      socket.on("addUser", (userId) => {
-        addUser(userId, socket.id);
-        io.emit("getUsers", users);
-      });
-      socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-        const user = getUser(receiverId);
-        io.to(user.socketId).emit("getMessage", {
-          senderId,
-          text,
-        });
-      });
-      socket.on("disconnect", () => {
-        console.log("a user disconnected");
-        removeUser(socket.id);
-        io.emit("getUsers", users);
-      });
-    });
   } catch (error) {
     console.log(error);
   }
 };
+
+const server = app.listen(PORT, () => {
+  console.log("server listening");
+});
+start();
+const io = require("socket.io")(server, {
+  cors: {
+    origin: process.env.FRONTEND_LINK,
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("user connected");
+
+  socket.on("addUser", (userId) => {
+    addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
+  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    const user = getUser(receiverId);
+    io.to(user.socketId).emit("getMessage", {
+      senderId,
+      text,
+    });
+  });
+  socket.on("disconnect", () => {
+    console.log("a user disconnected");
+    removeUser(socket.id);
+    io.emit("getUsers", users);
+  });
+});
